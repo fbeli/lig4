@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import br.com.becb.lig4.service.EntidadeApoio;
 import br.com.becb.lig4.service.Log4Service;
+import br.com.becb.lig4.suporte.EntidadeApoio;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

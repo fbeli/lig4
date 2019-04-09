@@ -1,4 +1,6 @@
-package br.com.becb.lig4.service;
+package br.com.becb.lig4.suporte;
+
+import br.com.becb.lig4.suporte.Marcar;
 
 public final class EntidadeApoio {
 

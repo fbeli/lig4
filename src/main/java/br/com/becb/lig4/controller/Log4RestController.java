@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.becb.lig4.service.Log4Service;
-import br.com.becb.lig4.service.Marcar;
+import br.com.becb.lig4.suporte.Marcar;
 
 @RestController
 public class Log4RestController {

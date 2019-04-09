@@ -2,6 +2,9 @@ package br.com.becb.lig4.service;
 
 import org.springframework.stereotype.Service;
 
+import br.com.becb.lig4.suporte.EntidadeApoio;
+import br.com.becb.lig4.suporte.Marcar;
+
 @Service
 public class Log4Service {
 

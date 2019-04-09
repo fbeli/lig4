@@ -1,4 +1,4 @@
-package br.com.becb.lig4.service;
+package br.com.becb.lig4.suporte;
 
 public class Marcar {
 
