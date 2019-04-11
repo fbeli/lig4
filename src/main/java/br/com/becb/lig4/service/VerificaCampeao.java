@@ -1,17 +1,150 @@
 package br.com.becb.lig4.service;
 
+
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException.Forbidden;
+
 
 import br.com.becb.lig4.suporte.CheckCampeao;
 
 @Service
 public class VerificaCampeao {
 
-	int maioValorColuna = 8;
+	final int maioValorColuna = 8;
+	final int maioValorLinha = 7;
+
+	int quantidadeCampeao = 4;
+
 	public CheckCampeao verificaCampeao(String[][] jogadas) {
 
 		return null;
+	}
+
+	public CheckCampeao verificaDiagonal(String[][] jogadas) {
+		CheckCampeao cc = new CheckCampeao();
+		cc = verificaDiagonalSuperior(jogadas, cc);
+		if (cc.isTemCampeao())
+			return cc;
+		
+		cc = verificaDiagonalInferior(jogadas, cc);
+		
+			return cc;
+	}
+
+	public CheckCampeao verificaDiagonalInferior(String[][] jogadas, CheckCampeao cc) {
+
+		for (int coluna = 0; coluna < maioValorColuna - 3; coluna++) {
+			for (int linha = maioValorLinha; linha >= maioValorLinha - 4; linha--) {
+				reiniciaCheckCampeao(cc);
+				if (jogadas[coluna][linha] != null) {
+					cc.setCor(jogadas[coluna][linha]);
+					verificarProximaInferior(cc, jogadas, coluna, linha, 1);
+					if (cc.isTemCampeao())
+						return cc;
+				} 
+
+			}
+		}
+
+		return cc;
+	}
+
+	private CheckCampeao verificarProximaInferior(CheckCampeao cc, String[][] jogadas, int coluna, int linha,
+			int pecaNumero) {
+
+		String colunaLinha = "0" + coluna + "0" + linha;
+
+		if (pecaNumero == 4 && (coluna < maioValorColuna && linha <= maioValorLinha)) {
+			cc.setPos4(colunaLinha);
+			cc.setTemCampeao(true);
+			return cc;
+		}
+
+		if (linha - 1 > 0) {
+			if ((cc.getCor() == jogadas[coluna + 1][linha - 1])) {
+
+				switch (pecaNumero) {
+				case 1:
+					cc.setPos1(colunaLinha);
+					verificarProximaInferior(cc, jogadas, coluna + 1, linha - 1, pecaNumero + 1);
+					break;
+				case 2:
+					cc.setPos2(colunaLinha);
+					verificarProximaInferior(cc, jogadas, coluna + 1, linha - 1, pecaNumero + 1);
+					break;
+				case 3:
+					cc.setPos3(colunaLinha);
+					verificarProximaInferior(cc, jogadas, coluna + 1, linha - 1, pecaNumero + 1);
+					break;
+
+				}
+			} else
+
+				cc.setTemCampeao(false);
+		}
+		return cc;
+
+	}
+
+	/**
+	 * 
+	 * @param cc
+	 * @param pecaNumero valor máximo 4, quantidade de peças que estaão em sequencia
+	 *                   para ser campeao
+	 * @return
+	 */
+
+	public CheckCampeao verificaDiagonalSuperior(String[][] jogadas, CheckCampeao cc) {
+
+		for (int coluna = 0; coluna < maioValorColuna - 3; coluna++) {
+			for (int linha = 0; maioValorColuna - 3 < 8; linha++) {
+				reiniciaCheckCampeao(cc);
+				if (jogadas[coluna][linha] != null) {
+					cc.setCor(jogadas[coluna][linha]);
+					verificarProximaSuperior(cc, jogadas, coluna, linha, 1);
+					if (cc.isTemCampeao())
+						return cc;
+				} else
+					break;
+
+			}
+		}
+
+		return cc;
+	}
+
+	private CheckCampeao verificarProximaSuperior(CheckCampeao cc, String[][] jogadas, int coluna, int linha,
+			int pecaNumero) {
+
+		String colunaLinha = "0" + coluna + "0" + linha;
+
+		if (pecaNumero == 4 && (coluna < maioValorColuna && linha < maioValorColuna)) {
+			cc.setPos4(colunaLinha);
+			cc.setTemCampeao(true);
+			return cc;
+		}
+
+		if ((cc.getCor() == jogadas[coluna + 1][linha + 1] || pecaNumero == 4)) {
+
+			switch (pecaNumero) {
+			case 1:
+				cc.setPos1(colunaLinha);
+				verificarProximaSuperior(cc, jogadas, coluna + 1, linha + 1, pecaNumero + 1);
+				break;
+			case 2:
+				cc.setPos2(colunaLinha);
+				verificarProximaSuperior(cc, jogadas, coluna + 1, linha + 1, pecaNumero + 1);
+				break;
+			case 3:
+				cc.setPos3(colunaLinha);
+				verificarProximaSuperior(cc, jogadas, coluna + 1, linha + 1, pecaNumero + 1);
+				break;
+
+			}
+		} else
+
+			cc.setTemCampeao(false);
+
+		return cc;
 	}
 
 	public CheckCampeao verificaHorizontal(String[][] jogadas) {
@@ -22,7 +155,7 @@ public class VerificaCampeao {
 				/*
 				 * if(null == jogadas[coluna][linha]) { reiniciaCheckCampeao(ea); break; }
 				 */
-				
+
 				if (jogadas[coluna][linha] != null) {
 					if (null == ea.getCor())
 						ea.setCor(jogadas[coluna][linha]);
@@ -35,9 +168,9 @@ public class VerificaCampeao {
 						ea.setCor(jogadas[coluna][linha]);
 						ea.setPos1("0" + coluna + "0" + linha);
 					}
-				}else
+				} else
 					reiniciaCheckCampeao(ea);
-				if( coluna == maioValorColuna-1) {
+				if (coluna == maioValorColuna - 1) {
 					reiniciaCheckCampeao(ea);
 				}
 			}
@@ -94,11 +227,6 @@ public class VerificaCampeao {
 		cc.setPos3("");
 		cc.setPos4("");
 		cc.setTemCampeao(false);
-	}
-
-	public CheckCampeao verificaDiagonal(String[][] jogadas) {
-
-		return null;
 	}
 
 }
