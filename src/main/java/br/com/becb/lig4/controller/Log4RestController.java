@@ -1,6 +1,8 @@
 
 package br.com.becb.lig4.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.becb.lig4.service.Log4Service;
+import br.com.becb.lig4.suporte.EntidadeJogador;
 import br.com.becb.lig4.suporte.Marcar;
 
 @RestController
@@ -15,6 +18,9 @@ public class Log4RestController {
 
 	@Autowired 
 	Log4Service log4service;
+	
+	  @Autowired
+	    private HttpSession httpSession;
 	
 	@RequestMapping(value = "/jogada", method = RequestMethod.GET)
 	public @ResponseBody String jogada(String coluna, String cor) {
@@ -33,7 +39,10 @@ public class Log4RestController {
 	@RequestMapping(value = "/cor", method = RequestMethod.GET)
 	public @ResponseBody String cor() {
 
-		String result = log4service.getCor();
+		
+		//String result = log4service.getCor();
+		EntidadeJogador jogador = (EntidadeJogador)httpSession.getAttribute("jogador");
+		String result = jogador.getCor();
 		return result;
 	}
 
